@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Quantize API Explanation</title>
     <style>
         body,
         html {
             margin: 0 0 6px 6px;
             border: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
         }
 
         div {
@@ -23,31 +25,116 @@
 
         .code {
             background: #eeeeee;
+            margin: 12px 0;
+        }
+
+        .code pre {
+            margin: 0;
+            padding: 0.8em 1em;
+            overflow-x: auto;
+            background: #0d1117;
+            color: #e6edf3;
+            border: solid gray;
+            border-width: 0.1em 0.1em 0.1em 0.8em;
+            border-radius: 4px;
+            line-height: 1.4;
+            font-size: 14px;
         }
 
         .explanation {
-            padding: 6px;
+            padding: 12px;
             background-color: #e9ffe9;
+            margin: 12px 0;
+            border-left: 4px solid #4CAF50;
         }
 
         .snippet {
             display: inline-block;
             background-color: #eeeeee;
             border-radius: 6px;
-            padding: 6px;
-            margin: 0;
+            padding: 12px;
+            margin: 12px 0;
+            font-family: monospace;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-x: auto;
+        }
+
+        ol,
+        ul {
+            margin: 6px 0 6px 24px;
+        }
+
+        .content {
+            margin: 12px 0;
+            padding: 8px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+
+        .critical {
+            background-color: #f09797;
+            padding: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #d32f2f;
+        }
+
+        .section {
+            margin: 24px 0;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #333;
+            background: #f0f0f0;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+
+        .subsection {
+            margin: 16px 0;
+            padding-left: 16px;
+            border-left: 2px solid #ccc;
+        }
+
+        .subsection-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        code {
+            background-color: rgb(235, 238, 242);
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+
+        .ql-indent-1 {
+            margin-left: 24px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="code">
-        <a href="https://github.com/pytorch/ao/blob/main/torchao/quantization/quant_api.py#L488" class="codelink"
-            target="_blank">
-            <div
-                style="background: #0d1117; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
-                <pre style="margin: 0; line-height: 125%;"><span></span><span style="color: #FF7B72">def</span><span style="color: #6E7681"> </span><span style="color: #D2A8FF; font-weight: bold">quantize_</span><span style="color: #E6EDF3">(</span>
+    <div class="section">
+        <div class="section-title">quantize_ Function</div>
+        
+        <div class="code">
+            <a href="https://github.com/pytorch/ao/blob/main/torchao/quantization/quant_api.py#L488" class="codelink" target="_blank">
+                <div>
+                    <pre style="margin: 0; line-height: 125%;"><span></span><span style="color: #FF7B72">def</span><span style="color: #6E7681"> </span><span style="color: #D2A8FF; font-weight: bold">quantize_</span><span style="color: #E6EDF3">(</span>
     <span style="color: #E6EDF3">model:</span> <span style="color: #E6EDF3">torch</span><span style="color: #FF7B72; font-weight: bold">.</span><span style="color: #E6EDF3">nn</span><span style="color: #FF7B72; font-weight: bold">.</span><span style="color: #E6EDF3">Module,</span>
     <span style="color: #E6EDF3">config:</span> <span style="color: #E6EDF3">AOBaseConfig,</span>
     <span style="color: #E6EDF3">filter_fn:</span> <span style="color: #E6EDF3">Optional[Callable[[torch</span><span style="color: #FF7B72; font-weight: bold">.</span><span style="color: #E6EDF3">nn</span><span style="color: #FF7B72; font-weight: bold">.</span><span style="color: #E6EDF3">Module,</span> <span style="color: #E6EDF3">str],</span> <span style="color: #E6EDF3">bool]]</span> <span style="color: #FF7B72; font-weight: bold">=</span> <span style="color: #79C0FF">None</span><span style="color: #E6EDF3">,</span>
@@ -112,20 +199,22 @@
 <span style="color: #6E7681">            </span><span style="color: #A5D6FF">&quot;&quot;&quot;Passing a generic Callable to `quantize_` is no longer recommended and will be deprecated at a later release. Please see https://github.com/pytorch/ao/issues/1690 for instructions on how to pass in workflow configuration instead.&quot;&quot;&quot;</span>
         <span style="color: #E6EDF3">)</span>
 </pre>
-            </div>
-        </a>
+                </div>
+            </a>
+        </div>
+
+        <div class="content">
+            <p id="filter_fn">filter_fn = _is_linear if filter_fn is None else filter_fn</p>
+        </div>
     </div>
 
-    <div class="content">
-        <p id="filter_fn">filter_fn = _is_linear if filter_fn is None else filter_fn</p>
-    </div>
-
-    <div class="code">
-        <a href="https://github.com/pytorch/ao/blob/main/torchao/quantization/quant_api.py#L277" class="codelink"
-            target="_blank">
-            <div
-                style="background: #0d1117; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
-                <pre style="margin: 0; line-height: 125%;"><span></span><span style="color: #FF7B72">def</span><span style="color: #6E7681"> </span><span style="color: #D2A8FF; font-weight: bold">_is_linear</span><span style="color: #E6EDF3">(mod,</span> <span style="color: #FF7B72; font-weight: bold">*</span><span style="color: #E6EDF3">args):</span>
+    <div class="section">
+        <div class="section-title">_is_linear Function</div>
+        
+        <div class="code">
+            <a href="https://github.com/pytorch/ao/blob/main/torchao/quantization/quant_api.py#L277" class="codelink" target="_blank">
+                <div>
+                    <pre style="margin: 0; line-height: 125%;"><span></span><span style="color: #FF7B72">def</span><span style="color: #6E7681"> </span><span style="color: #D2A8FF; font-weight: bold">_is_linear</span><span style="color: #E6EDF3">(mod,</span> <span style="color: #FF7B72; font-weight: bold">*</span><span style="color: #E6EDF3">args):</span>
     <span style="color: #8B949E; font-style: italic"># avoid circular dependencies</span>
     <span style="color: #FF7B72">from</span><span style="color: #6E7681"> </span><span style="color: #FF7B72">torchao.quantization.qat.affine_fake_quantized_tensor</span><span style="color: #6E7681"> </span><span style="color: #FF7B72">import</span> <span style="color: #E6EDF3">(</span>
         <span style="color: #E6EDF3">_AffineFakeQuantizedTensor,</span>
@@ -144,98 +233,80 @@
         <span style="color: #FF7B72; font-weight: bold">and</span> <span style="color: #FF7B72; font-weight: bold">not</span> <span style="color: #E6EDF3">isinstance(mod,</span> <span style="color: #E6EDF3">nn</span><span style="color: #FF7B72; font-weight: bold">.</span><span style="color: #E6EDF3">modules</span><span style="color: #FF7B72; font-weight: bold">.</span><span style="color: #E6EDF3">linear</span><span style="color: #FF7B72; font-weight: bold">.</span><span style="color: #E6EDF3">NonDynamicallyQuantizableLinear)</span>
     <span style="color: #E6EDF3">)</span>
 </pre>
-            </div>
-        </a>
+                </div>
+            </a>
+        </div>
+
+        <div class="explanation">
+            <p><code>_is_linear</code> function determines if a module should be quantized. It returns <code>True</code> only if:</p>
+            <ol>
+                <li><code>isinstance(mod, torch.nn.Linear)</code> - Module must be a Linear layer</li>
+                <li><code>hasattr(mod, "weight")</code> - Must have a weight parameter</li>
+                <li>Multiple exclusion checks - Weight must NOT already be quantized:</li>
+            </ol>
+            <ul>
+                <li class="ql-indent-1"><code>QuantizedLinearWeightBase</code> - Base class for quantized weights</li>
+                <li class="ql-indent-1"><code>AutoQuantizableLinearWeight</code> - For auto-quantization</li>
+                <li class="ql-indent-1"><code>AffineQuantizedTensor</code> - Already affine quantized</li>
+                <li class="ql-indent-1"><code>LinearActivationQuantizedTensor</code> - Already has activation quantization</li>
+                <li class="ql-indent-1"><code>_AffineFakeQuantizedTensor</code> - Already fake quantized (QAT)</li>
+                <li class="ql-indent-1"><code>NonDynamicallyQuantizableLinear</code> - PyTorch's marker for layers that shouldn't be dynamically quantized</li>
+            </ul>
+            <p><strong>This prevents double quantization!</strong> Critical safety check.</p>
+        </div>
     </div>
 
-    <div class="explanation">
-        <p><code style="background-color: rgb(235, 238, 242);">_is_linear</code> function determines if a module should
-            be quantized. It returns&nbsp;<code style="background-color: rgb(235, 238, 242);">True</code>&nbsp;only if:
-        </p>
-        <ol>
-            <li><code style="background-color: rgb(235, 238, 242);">isinstance(mod, torch.nn.Linear)</code>&nbsp;-
-                Module
-                must
-                be a Linear layer</li>
-            <li><code style="background-color: rgb(235, 238, 242);">hasattr(mod, "weight")</code>&nbsp;- Must have a
-                weight
-                parameter</li>
-            <li>Multiple exclusion checks&nbsp;- Weight must NOT already be quantized:</li>
-        </ol>
-        <ul>
-            <li class="ql-indent-1"><code
-                    style="background-color: rgb(235, 238, 242);">QuantizedLinearWeightBase</code>&nbsp;-
-                Base class for quantized weights</li>
-            <li class="ql-indent-1"><code
-                    style="background-color: rgb(235, 238, 242);">AutoQuantizableLinearWeight</code>&nbsp;- For
-                auto-quantization</li>
-            <li class="ql-indent-1"><code
-                    style="background-color: rgb(235, 238, 242);">AffineQuantizedTensor</code>&nbsp;-
-                Already affine quantized</li>
-            <li class="ql-indent-1"><code
-                    style="background-color: rgb(235, 238, 242);">LinearActivationQuantizedTensor</code>&nbsp;- Already
-                has
-                activation quantization</li>
-            <li class="ql-indent-1"><code
-                    style="background-color: rgb(235, 238, 242);">_AffineFakeQuantizedTensor</code>&nbsp;-
-                Already fake quantized (QAT)</li>
-            <li class="ql-indent-1"><code
-                    style="background-color: rgb(235, 238, 242);">NonDynamicallyQuantizableLinear</code>&nbsp;-
-                PyTorch's
-                marker
-                for layers that shouldn't be dynamically quantized</li>
-        </ul>
-        <p><strong>This prevents double quantization!</strong> Critical safety check.</p>
+    <div class="section">
+        <div class="section-title">quantize_ Function Logic</div>
+        
+        <div class="content">
+            <p>if isinstance(config, ModuleFqnToConfig):</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;_replace_with_custom_fn_if_matches_filter_with_name(</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model,</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_module_fqn_to_config_handler,</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter_fn,</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;device=device,</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extra_args=(config,),</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;)</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;return</p>
+            <br>
+            <p>if isinstance(config, AOBaseConfig):</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;handler = _QUANTIZE_CONFIG_HANDLER[type(config)]</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;# for each linear in the model, apply the transform if filtering passes</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;_replace_with_custom_fn_if_matches_filter(</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model,</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handler,</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter_fn,</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;device=device,</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extra_args=(config,),</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;)</p>
+        </div>
+
+        <div class="explanation">
+            <p>Path 1: <code>ModuleFqnToConfig</code> - Granular Control</p>
+            <ul>
+                <li>Allows different quantization settings per module</li>
+                <li>Example: Quantize attention layers with int4, MLP layers with int8</li>
+                <li>Uses FQN (Fully Qualified Name) to map modules to configs</li>
+            </ul>
+            <p>Path 2: <code>AOBaseConfig</code> - Uniform Application</p>
+            <ul>
+                <li>Applies same quantization to all matching modules</li>
+                <li>Simpler use case - "quantize everything with int4"</li>
+                <li>No per-module differentiation</li>
+            </ul>
+        </div>
     </div>
 
-    <div class="content">
-        <p>if isinstance(config, ModuleFqnToConfig):</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;_replace_with_custom_fn_if_matches_filter_with_name(</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model,</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_module_fqn_to_config_handler,</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter_fn,</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;device=device,</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extra_args=(config,),</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;)</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;return</p>
-        <br>
-        <p>if isinstance(config, AOBaseConfig):</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;handler = _QUANTIZE_CONFIG_HANDLER[type(config)]</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;# for each linear in the model, apply the transform if filtering passes</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;_replace_with_custom_fn_if_matches_filter(</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model,</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handler,</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filter_fn,</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;device=device,</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;extra_args=(config,),</p>
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;)</p>
-    </div>
-
-    <div class="explanation">
-        <p>Path 1:&nbsp;<code style="background-color: rgb(235, 238, 242);">ModuleFqnToConfig</code>&nbsp;- Granular
-            Control</p>
-        <ul>
-            <li>Allows&nbsp;different quantization settings per module</li>
-            <li>Example: Quantize attention layers with int4, MLP layers with int8</li>
-            <li>Uses FQN (Fully Qualified Name) to map modules to configs</li>
-        </ul>
-        <p>Path 2:&nbsp;<code style="background-color: rgb(235, 238, 242);">AOBaseConfig</code>&nbsp;- Uniform
-            Application</p>
-        <ul>
-            <li>Applies&nbsp;same quantization to all matching modules</li>
-            <li>Simpler use case - "quantize everything with int4"</li>
-            <li>No per-module differentiation</li>
-        </ul>
-    </div>
-
-    <div class="explanation">
-        <p><strong>Path 1</strong></p>
-        <div class="code">
-            <a href="https://github.com/pytorch/ao/blob/main/torchao/quantization/quant_api.py#L2365" class="codelink"
-                target="_blank">
-                <div
-                    style="background: #0d1117; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
-                    <pre style="margin: 0; line-height: 125%;"><span></span><span style="color: #D2A8FF; font-weight: bold">@dataclass</span>
+    <div class="section">
+        <div class="section-title">ModuleFqnToConfig Class</div>
+        
+        <div class="explanation">
+            <p><strong>Path 1</strong></p>
+            <div class="code">
+                <a href="https://github.com/pytorch/ao/blob/main/torchao/quantization/quant_api.py#L2385" class="codelink" target="_blank">
+                    <div>
+                        <pre style="margin: 0; line-height: 125%;"><span></span><span style="color: #D2A8FF; font-weight: bold">@dataclass</span>
 <span style="color: #FF7B72">class</span><span style="color: #6E7681"> </span><span style="color: #F0883E; font-weight: bold">ModuleFqnToConfig</span><span style="color: #E6EDF3">(AOBaseConfig):</span>
 <span style="color: #6E7681">    </span><span style="color: #A5D6FF">&quot;&quot;&quot;Per module configurations for torchao quantize_ API</span>
 
@@ -254,90 +325,87 @@
     <span style="color: #FF7B72">def</span><span style="color: #6E7681"> </span><span style="color: #D2A8FF; font-weight: bold">__post_init__</span><span style="color: #E6EDF3">(self):</span>
         <span style="color: #E6EDF3">torch</span><span style="color: #FF7B72; font-weight: bold">.</span><span style="color: #E6EDF3">_C</span><span style="color: #FF7B72; font-weight: bold">.</span><span style="color: #E6EDF3">_log_api_usage_once(</span><span style="color: #A5D6FF">&quot;torchao.quantization.ModuleFqnToConfig&quot;</span><span style="color: #E6EDF3">)</span>
 </pre>
-                </div>
-            </a>
-        </div>
+                    </div>
+                </a>
+            </div>
 
-        <div class="explanation">
-            <div>
-                <p>1. <code>@dataclass</code> decorator</p>
-                <p>What
-                    <code><a href="https://docs.python.org/3/library/dataclasses.html#module-contents" class="codelink" target="_blank">@dataclass</a></code>
-                    actually does:
-                </p>
-                <p>When we write:</p>
-                <pre class="snippet" spellcheck="false">
+            <div class="explanation">
+                <div class="subsection">
+                    <div class="subsection-title">1. @dataclass decorator</div>
+                    <p>What <code><a href="https://docs.python.org/3/library/dataclasses.html#module-contents" class="codelink" target="_blank">@dataclass</a></code> actually does:</p>
+                    <p>When we write:</p>
+                    <pre class="snippet" spellcheck="false">
 @dataclass
 class MyClass:
     x: int
     y: int
 </pre>
-                <p>Python <strong>first creates the class normally</strong>, as if we had written:</p>
-                <pre class="snippet" spellcheck="false">
+                    <p>Python <strong>first creates the class normally</strong>, as if we had written:</p>
+                    <pre class="snippet" spellcheck="false">
 class MyClass:
     x: int
     y: int
 </pre>
-                <p>Now we just have a plain old class object <code>MyClass</code> (with no methods like
-                    <code>__init__</code>, <code>__repr__</code>, etc.).
-                </p>
-                <p>Then the decorator step happens:</p>
-                <ul>
-                    <li><code>@dataclass</code> is syntax sugar for:</li>
-                </ul>
-                <pre class="snippet" spellcheck="false">
+                    <p>Now we just have a plain old class object <code>MyClass</code> (with no methods like <code>__init__</code>, <code>__repr__</code>, etc.).</p>
+                    <p>Then the decorator step happens:</p>
+                    <ul>
+                        <li><code>@dataclass</code> is syntax sugar for:</li>
+                    </ul>
+                    <pre class="snippet" spellcheck="false">
 class MyClass:
     x: int
     y: int
 MyClass = dataclass(MyClass)
 </pre>
-                <p>So <code>dataclass()</code> is just a function that <strong>takes the class object</strong> and
-                    <strong>returns a modified version of it</strong> (with new methods attached).
-                </p>
-                <p>Now the name <code>MyClass</code> refers to the transformed class, not the original.</p>
-            </div>
-            <hr>
-            <div>
-                <p>2. Class definition</p>
-                <pre class="snippet" spellcheck="false">class ModuleFqnToConfig(AOBaseConfig):</pre>
-                <p>Defines a new class called ModuleFqnToConfig.</p>
-                <p>Inherits from <code>AOBaseConfig</code></p>
-                <p>Any class inheriting <code>AOBaseConfig</code> can be <strong>used as a configuration for
-                    </strong><code><strong>quantize_</strong></code> in PyTorch</p>
-            </div>
-            <hr>
-            <div>
-                <p>3. Field</p>
-                <pre class="snippet" spellcheck="false">
+                    <p>So <code>dataclass()</code> is just a function that <strong>takes the class object</strong> and <strong>returns a modified version of it</strong> (with new methods attached).</p>
+                    <p>Now the name <code>MyClass</code> refers to the transformed class, not the original.</p>
+                </div>
+
+                <hr>
+
+                <div class="subsection">
+                    <div class="subsection-title">2. Class definition</div>
+                    <pre class="snippet" spellcheck="false">class ModuleFqnToConfig(AOBaseConfig):</pre>
+                    <p>Defines a new class called ModuleFqnToConfig.</p>
+                    <p>Inherits from <code>AOBaseConfig</code></p>
+                    <p>Any class inheriting <code>AOBaseConfig</code> can be <strong>used as a configuration for <code>quantize_</code></strong> in PyTorch</p>
+                </div>
+
+                <hr>
+
+                <div class="subsection">
+                    <div class="subsection-title">3. Field</div>
+                    <pre class="snippet" spellcheck="false">
 module_fqn_to_config: Dict[str, Optional[AOBaseConfig]] = field(
     default_factory=dict
 )
 </pre>
-                <p>"This creates a dictionary where we can store which quantization settings to use for each part of our
-                    model."</p>
-                <p>This line declares a dataclass field named <code>module_fqn_to_config</code>.</p>
-                <pre class="snippet" spellcheck="false">module_fqn_to_config</pre>
-                <ul>
-                    <li>module&nbsp;= a layer in your neural network (like Linear, Conv2d)</li>
-                    <li>fqn&nbsp;= "Fully Qualified Name" (like "model.layers.0.attention")</li>
-                    <li>to_config&nbsp;= maps to quantization settings</li>
-                </ul>
-                <p>So:&nbsp;"Map module names → quantization settings"</p>
-                <br>
-                <pre class="snippet" spellcheck="false">: Dict[str, Optional[AOBaseConfig]]
+                    <p>"This creates a dictionary where we can store which quantization settings to use for each part of our model."</p>
+                    <p>This line declares a dataclass field named <code>module_fqn_to_config</code>.</p>
+                    
+                    <pre class="snippet" spellcheck="false">module_fqn_to_config</pre>
+                    <ul>
+                        <li>module = a layer in your neural network (like Linear, Conv2d)</li>
+                        <li>fqn = "Fully Qualified Name" (like "model.layers.0.attention")</li>
+                        <li>to_config = maps to quantization settings</li>
+                    </ul>
+                    <p>So: "Map module names → quantization settings"</p>
+                    
+                    <br>
+                    <pre class="snippet" spellcheck="false">: Dict[str, Optional[AOBaseConfig]]
 </pre>
-                <p>equivalent to</p>
-                <pre class="snippet" spellcheck="false">Dictionary where:
+                    <p>equivalent to</p>
+                    <pre class="snippet" spellcheck="false">Dictionary where:
   Keys = "model.layer1.linear" (string - the module's full path)
   Values = Either:
            - A quantization config (like Int4WeightOnlyConfig) 
            - OR None (meaning "don't quantize this module")
 </pre>
 
-                <br>
-                <p>Examples:</p>
-                <div class="snippet">
-                    <pre>config_eg1 = ModuleFqnToConfig()   # default_factory assigns default value {}
+                    <br>
+                    <p>Examples:</p>
+                    <div class="snippet">
+                        <pre>config_eg1 = ModuleFqnToConfig()   # default_factory assigns default value {}
 
 config_eg2 = ModuleFqnToConfig({}) # Same as eg1 although different instances (not shared) thanks to default_factory
 
@@ -355,28 +423,27 @@ config_eg5 = ModuleFqnToConfig({
 &nbsp; &nbsp; "model.layers.0.attention": Int4Config(),&nbsp; &nbsp;# Quantize to int4
 &nbsp; &nbsp; "_default": Int8Config()&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Everything else → int8
 })</pre>
+                    </div>
+                    <p><br></p>
                 </div>
-                <p><br></p>
-            </div>
-            <div>
-                <pre class="snippet" spellcheck="false">default_factory</pre>
-                <p>If we simply have <code>module_fqn_to_config: Dict[str, Optional[AOBaseConfig]] = {}</code> every
-                    instance will use this shared class variable. And its critical bug since this shared state is
-                    mutable. <br><strong>In ANY Python code, you must not use mutable objects (list, dict, set) as
-                        DEFAULT
-                        ARGUMENTS because they are created ONCE and shared which will cause unexpected
-                        outcomes.</strong></p><br>
-                <p>The Infamous Mutable Default bug source</p>
-                <pre class="snippet" spellcheck="false">class BadConfig:
+
+                <div class="subsection">
+                    <div class="subsection-title">default_factory</div>
+                    <pre class="snippet" spellcheck="false">default_factory</pre>
+                    <p>If we simply have <code>module_fqn_to_config: Dict[str, Optional[AOBaseConfig]] = {}</code> every instance will use this shared class variable. And its critical bug since this shared state is mutable. <br><strong>In ANY Python code, you must not use mutable objects (list, dict, set) as DEFAULT ARGUMENTS because they are created ONCE and shared which will cause unexpected outcomes.</strong></p>
+                    <br>
+                    <p>The Infamous Mutable Default bug source</p>
+                    <pre class="snippet" spellcheck="false">class BadConfig:
     mapping = {}  # Shared across all instances since it is treated as class variable. DANGEROUS!
 
 # SAFE - Separate dictionaries (what we USE):
 @dataclass
 class GoodConfig:
     mapping: Dict = field(default_factory=dict)  # Creates new dict per instance
-</pre><br>
-                <p>Why? what happens?</p>
-                <pre class="snippet" spellcheck="false"># DANGEROUS: This creates ONE shared dictionary for ALL instances
+</pre>
+                    <br>
+                    <p>Why? what happens?</p>
+                    <pre class="snippet" spellcheck="false"># DANGEROUS: This creates ONE shared dictionary for ALL instances
 class BadConfig:
 &nbsp; &nbsp; mapping = {}&nbsp; # All BadConfig instances share this same dict!
 
@@ -386,8 +453,8 @@ b = BadConfig()
 a.mapping['key'] = 'value'
 print(b.mapping)&nbsp; # Oops! b also has {'key': 'value'} - BUG!
 </pre>
-                <p>Simple example:</p>
-                <pre class="snippet" spellcheck="false"># DANGEROUS - Shared mutable default
+                    <p>Simple example:</p>
+                    <pre class="snippet" spellcheck="false"># DANGEROUS - Shared mutable default
 def bad_function(items=[]):&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Created ONCE when function is defined
 &nbsp; &nbsp; items.append("bad")
 &nbsp; &nbsp; return items
@@ -397,8 +464,8 @@ print(bad_function())&nbsp; # ['bad']
 print(bad_function())&nbsp; # ['bad', 'bad'] ← OOPS! Shared state!
 </pre>
 
-                <p>Best practice: <strong>Mutable objects should be CREATED when needed, not when defined.</strong></p>
-                <pre class="snippet" spellcheck="false">def good_function(items=None):&nbsp; &nbsp; &nbsp; &nbsp;# Use None, create inside
+                    <p>Best practice: <strong>Mutable objects should be CREATED when needed, not when defined.</strong></p>
+                    <pre class="snippet" spellcheck="false">def good_function(items=None):&nbsp; &nbsp; &nbsp; &nbsp;# Use None, create inside
 &nbsp; &nbsp; if items is None:
 &nbsp; &nbsp; &nbsp; &nbsp; items = []&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# NEW list each call
 &nbsp; &nbsp; items.append("good")
@@ -409,9 +476,9 @@ print(good_function())&nbsp; # ['good']
 print(good_function())&nbsp; # ['good'] ← Perfect! Separate lists
 </pre>
 
-                <p>For regular classes:</p>
-                <p>What we write:</p>
-                <pre class="snippet" spellcheck="false"># Regular class - explicit
+                    <p>For regular classes:</p>
+                    <p>What we write:</p>
+                    <pre class="snippet" spellcheck="false"># Regular class - explicit
 class RegularConfig:
     def __init__(self):
         self.mapping = {}
@@ -421,29 +488,27 @@ class RegularConfig:
 class DataConfig:
     mapping: Dict = field(default_factory=dict)
 </pre>
-                <p>What Python executes:</p>
-                <pre class="snippet" spellcheck="false"># Both end up with the same effective __init__:
+                    <p>What Python executes:</p>
+                    <pre class="snippet" spellcheck="false"># Both end up with the same effective __init__:
 def __init__(self, mapping=None):
     if mapping is None:
         self.mapping = {}  # Instance variable!
     else:
         self.mapping = mapping
 </pre>
-                <p><br></p>
+                    <p><br></p>
+                </div>
             </div>
         </div>
     </div>
-    <div style="background-color: rgb(240, 151, 151);">Critical bugs like this that are very subtle and therefore the
-        hardest to debug is the reason why I thought we can go for Rust over cpp cos in this instance the same program
-        will compile without any error (atleast python offers runtime protection) whereas compilation will fail in case of rust.
-        Choice any language over another is not going to be based on ease of development (such as auto memory management
-        - also rust forces to adhere to ownership/borrow memory management paradigm whih\ch is not automatic in the
-        traditional sense since it does not use a garbage collector) but based on reduced shoot in the foot factors.
-        Although, ultimately the best choice shall be cpp since other teams' code shall be strongly cpp ecosystem
-        friendly and usage of rust will require binding for interoperability which might not as feasible as it was for
-        datapipeline since qwuantization is quite interlinked.
 
-        - will be removed in next iteration
+    <div class="critical">
+        <p>Critical bugs like this that are very subtle and therefore the hardest to debug is the reason why I thought we can go for Rust over cpp cos in this instance the same program will compile without any error (atleast python offers runtime protection) whereas compilation will fail in case of rust.</p>
+        <p>Choice any language over another is not going to be based on ease of development (such as auto memory management - also rust forces to adhere to ownership/borrow memory management paradigm whih\ch is not automatic in the traditional sense since it does not use a garbage collector) but based on reduced shoot in the foot factors.</p>
+        <p>Although, ultimately the best choice shall be cpp since other teams' code shall be strongly cpp ecosystem friendly and usage of rust will require binding for interoperability which might not as feasible as it was for datapipeline since qwuantization is quite interlinked.</p>
+        <p>- will be removed in next iteration</p>
+    </div>
+
 </body>
 
 </html>
